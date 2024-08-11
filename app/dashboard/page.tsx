@@ -9,8 +9,8 @@ export default async function Dashboard() {
     redirect("/");
   }
 
-  const permission = await getPermissions();
-  console.log(permission);
+  const permissions = await getPermissions();
+  console.log(permissions);
 
   return <h3>Dashboard</h3>;
 }
