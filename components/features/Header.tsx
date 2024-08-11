@@ -43,15 +43,7 @@ export const navLinks = [
     icon: ShoppingCart,
     badge: 12,
   },
-  { id: 3, name: "Personnels", href: "/dashboard/personnels", icon: Package },
-  {
-    id: 4,
-    name: "Enfants",
-    href: "/dashboard/students",
-    icon: Users,
-    badge: 7,
-  },
-  { id: 5, name: "Paramettres", href: "/dashboard/settings", icon: LineChart },
+  { id: 3, name: "Settings", href: "/dashboard/Settings", icon: Package },
 ];
 
 export default function Header() {

@@ -1,18 +1,15 @@
+"use client";
+
 import Link from "next/link";
 import {
   Bell,
-  CircleUser,
   Home,
-  LineChart,
-  Menu,
   Package,
   Package2,
-  Search,
   ShoppingCart,
   Users,
 } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -22,12 +19,55 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+
 import Header from "@/components/features/Header";
+import { ReactNode } from "react";
+import { usePathname } from "next/navigation";
+type navLinks = {
+  id: number;
+  name: string;
+  href: string;
+  icon: ReactNode;
+  badge: number;
+  requireAuth: boolean;
+};
+
+export const navLinks = [
+  { id: 1, name: "Dashboard", href: "/dashboard", icon: Home },
+  {
+    id: 2,
+    name: "Auth",
+    href: "/dashboard/Auth",
+    icon: ShoppingCart,
+    badge: 12,
+    requireAuth: false,
+  },
+  {
+    id: 2,
+    name: "Users",
+    href: "/dashboard/users",
+    icon: ShoppingCart,
+    badge: 12,
+    requireAuth: true,
+  },
+  {
+    id: 3,
+    name: "Settings",
+    href: "/dashboard/settings",
+    icon: Package,
+    requireAuth: true,
+  },
+];
 export default function LayoutDashboard({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  const activeLink =
+    "/dashboard" + (pathname.split("/")[2] ? "/" + pathname.split("/")[2] : "");
+  const { isAuthenticated } = useKindeBrowserClient();
   return (
     <>
       <div className='grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]'>
@@ -45,44 +85,25 @@ export default function LayoutDashboard({
             </div>
             <div className='flex-1'>
               <nav className='grid items-start px-2 text-sm font-medium lg:px-4'>
-                <Link
-                  href='#'
-                  className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
-                >
-                  <Home className='h-4 w-4' />
-                  Dashboard
-                </Link>
-                <Link
-                  href='#'
-                  className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
-                >
-                  <ShoppingCart className='h-4 w-4' />
-                  Orders
-                  <Badge className='ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full'>
-                    6
-                  </Badge>
-                </Link>
-                <Link
-                  href='#'
-                  className='flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary'
-                >
-                  <Package className='h-4 w-4' />
-                  Products{" "}
-                </Link>
-                <Link
-                  href='#'
-                  className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
-                >
-                  <Users className='h-4 w-4' />
-                  Customers
-                </Link>
-                <Link
-                  href='#'
-                  className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
-                >
-                  <LineChart className='h-4 w-4' />
-                  Analytics
-                </Link>
+                {navLinks.map(
+                  ({ id, href, name, icon: Icon, badge, requireAuth }) => {
+                    if (requireAuth && !isAuthenticated) {
+                      return null;
+                    }
+                    return (
+                      <Link
+                        className={`mx-[-0.65rem] flex items-center gap-4 rounded-xl text-muted-foreground px-3 py-2 ${
+                          activeLink === href && "bg-muted text-primary"
+                        } text-foreground hover:text-foreground`}
+                        href={href}
+                        key={id}
+                      >
+                        <Icon className='h-4 w-4' />
+                        {name}
+                      </Link>
+                    );
+                  }
+                )}
               </nav>
             </div>
             <div className='mt-auto p-4'>

@@ -9,8 +9,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { Button } from "../ui/button";
 import { CircleUser } from "lucide-react";
+import Link from "next/link";
 
 export default function UserInfo() {
   const { user } = useKindeBrowserClient();
@@ -26,10 +28,14 @@ export default function UserInfo() {
       <DropdownMenuContent align='end'>
         <DropdownMenuLabel>Name: {user?.family_name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Settings</DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href={"/dashboard/settings"}>Settings</Link>
+        </DropdownMenuItem>
         <DropdownMenuItem>Support</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Logout</DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <LogoutLink>Logout</LogoutLink>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
