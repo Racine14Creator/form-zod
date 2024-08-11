@@ -73,7 +73,7 @@ export default function LayoutDashboard({
   const pathname = usePathname();
   const activeLink =
     "/dashboard" + (pathname.split("/")[2] ? "/" + pathname.split("/")[2] : "");
-  const { permissions } = useKindeBrowserClient();
+  const { permissions, isLoading } = useKindeBrowserClient();
 
   return (
     <>
@@ -92,6 +92,7 @@ export default function LayoutDashboard({
             </div>
             <div className='flex-1'>
               <nav className='grid items-start px-2 text-sm font-medium lg:px-4'>
+                {isLoading && "Loading..."}
                 {navLinks.map(
                   ({ id, href, name, icon, badge, requirePermission }) => {
                     const hasPermission =
@@ -124,7 +125,7 @@ export default function LayoutDashboard({
                 )}
               </nav>
             </div>
-            <div className='mt-auto p-4'>
+            <div className='fixedmt-auto p-4'>
               <Card>
                 <CardHeader className='p-2 pt-0 md:p-4'>
                   <CardTitle>Upgrade to Pro</CardTitle>
